@@ -14,7 +14,14 @@ class CreateBooksTable extends Migration
     public function up()
     {
         Schema::create('books', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->string('title', 100);
+            $table->mediumText('content');
+            $table->string('cover');
+            $table->integer('author_id')->unsigned();
+            $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
+            $table->float('price', 8, 2);
+            $table->integer('year_published');
             $table->timestamps();
         });
     }

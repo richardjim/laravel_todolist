@@ -6,7 +6,7 @@ use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 
-class BookController extends Controller
+class BooksController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,9 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        $books = Book::orderBy('created_at', 'desc')->paginate(10);
+        // dd($books);
+        return view('books.index', compact('books'));
     }
 
     /**
