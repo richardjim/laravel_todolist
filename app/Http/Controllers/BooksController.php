@@ -49,7 +49,7 @@ class BooksController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        return view('books.single', compact('book'));
     }
 
     /**
