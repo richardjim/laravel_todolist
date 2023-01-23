@@ -60,7 +60,7 @@ class BooksController extends Controller
      */
     public function edit(Book $book)
     {
-        //
+        return view('books.edit')->with('book', $book);
     }
 
     /**
@@ -72,7 +72,12 @@ class BooksController extends Controller
      */
     public function update(UpdateBookRequest $request, Book $book)
     {
-        //
+        $book->update([
+            'title' => $request->title,
+            'content' => $request->content,
+            'price' => $request->price,
+            'year_published' => $request->year_published,
+        ]);
     }
 
     /**

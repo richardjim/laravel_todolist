@@ -42,7 +42,7 @@
                                 <td>{{$book->updated_at}}</td>
                                 <td>{{Str::substr($book->content,0,100)}}</td>
                                 <td>
-                                    <a href="{{route('books.show',$book->id)}}" class="btn btn-primary">Edit</a>
+                                    <a href="{{route('books.edit',$book->id)}}" class="btn btn-primary">Edit</a>
                                 </td>
                                 <td>
                                     <a href="{{route('books.destroy',$book->id)}}" class="btn btn-danger">Delete</a>
