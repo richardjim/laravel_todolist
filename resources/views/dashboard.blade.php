@@ -7,6 +7,7 @@
             <div class="card">
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
+                <a href="" data-toggle="" class="btn btn-info  col-md-2 ml-auto m-3" data-target="#addNewBookModal">Add new Book</a>
                 <div class="card-body">
                     @if (session('success'))
                     <div class="alert alert-success m-3" role="alert">
@@ -47,8 +48,11 @@
                             @foreach($books as $book)
                             <tr>
                                 <td>
-                                    <img src="{{$book->cover}}" alt="{{$book->title}}" class="img-thumbnail">
-
+                                    @if(Str::contains($book->cover,'https'))
+                                    <img src="{{$book->cover}}" alt="{{$book->title}}" width="100px" height="70px" class="img-thumbnail">
+                                    @else
+                                    <img src="{{asset('assets/books/'.$book->cover)}}" width="100px" height="70px" alt="{{$book->title}}" class="img-thumbnail">
+                                    @endif
                                 </td>
                                 <td>{{$book->title}}</td>
                                 <td>{{$book->author->name}}</td>

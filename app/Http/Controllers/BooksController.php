@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Exception;
+use Log;
 
 class BooksController extends Controller
 {
@@ -123,9 +125,12 @@ class BooksController extends Controller
      */
     public function destroy(Book $book)
     {
-
-        $book->delete();
-
-        return back()->with('success', 'Book Deleted Successfully');
+        try {
+            $book->delete();
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return back()->with('error', 'Book Not Deleted');
+        }
+        return back()->with('success', 'Book Deleted');
     }
 }
