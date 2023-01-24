@@ -123,6 +123,9 @@ class BooksController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+
+        $book->delete();
+
+        return back()->with('success', 'Book Deleted Successfully');
     }
 }

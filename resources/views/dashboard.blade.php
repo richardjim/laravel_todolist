@@ -60,7 +60,11 @@
                                     <a href="{{URL::to('books/'.$book->id.'/edit')}}" class="btn btn-primary">Edit</a>
                                 </td>
                                 <td>
-                                    <a href="{{route('books.destroy',$book->id)}}" class="btn btn-danger">Delete</a>
+                                    <form method="post" action="{{route('books.destroy',['book' => $book->id])}}">
+                                        {{csrf_field()}}
+                                        {{method_field('DELETE')}}
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach
