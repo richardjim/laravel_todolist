@@ -8,12 +8,27 @@
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('status') }}
+                    @if (session('success'))
+                    <div class="alert alert-success m-3" role="alert">
+                        {{ session('success') }}
                     </div>
                     @endif
 
+                    @if($errors->any())
+                    <div class="alert alert-danger m-3">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @else
+                    @if(session('error'))
+                    <div class="alert alert-danger m-3">
+                        {{session('error')}}
+                    </div>
+                    @endif
+                    @endif
                     {{ __('You are logged in!') }}
                     @if(isset($books))
                     <table class="table">
@@ -42,7 +57,7 @@
                                 <td>{{$book->updated_at}}</td>
                                 <td>{{Str::substr($book->content,0,100)}}</td>
                                 <td>
-                                    <a href="{{route('books.edit',$book->id)}}" class="btn btn-primary">Edit</a>
+                                    <a href="{{URL::to('books/'.$book->id.'/edit')}}" class="btn btn-primary">Edit</a>
                                 </td>
                                 <td>
                                     <a href="{{route('books.destroy',$book->id)}}" class="btn btn-danger">Delete</a>

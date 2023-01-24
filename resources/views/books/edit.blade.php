@@ -17,14 +17,14 @@
                     {{ __('You are logged in!') }}
                     <hr>
                     @if(isset($book))
-                    <form action="{{route('books.update',$book->id)}}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        {{method_field('PUT')}}
+                    <form enctype="multipart/form-data" action="{{route('books.update',['book' => $book->id])}}" method="POST">
+                        {{ csrf_field() }}
+                        {{ method_field('PUT') }}
                         <div class="form-group">
                             <label for="bookCover">Cover</label>
-                            <input type="file" class="form-control" id="bookCover">
-
+                            <input type="file" name="cover" class="form-control" id="bookCover">
                         </div>
+
                         <div class="form-group">
                             <label for="bookTitle">Book Title</label>
                             <input type="text" name="title" class="form-control" value={{$book->title}} id="bookTitle">
@@ -41,8 +41,8 @@
 
                         </div>
                         <div class="form-group">
-                            <label for="year">Year Published</label>
-                            <input type="text" name="year_publish" class="form-control" id="year" value="{{$book->year_published}}">
+                            <label for="year_published">Year Published</label>
+                            <input type="text" name="year_published" class="form-control" id="year_published" value="{{$book->year_published}}">
 
                         </div>
                         <br>

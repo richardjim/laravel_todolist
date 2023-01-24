@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class BooksController extends Controller
 {
@@ -72,12 +74,45 @@ class BooksController extends Controller
      */
     public function update(UpdateBookRequest $request, Book $book)
     {
-        $book->update([
-            'title' => $request->title,
-            'content' => $request->content,
-            'price' => $request->price,
-            'year_published' => $request->year_published,
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'content' => 'required',
+            'cover' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'price' => 'required',
+            'year_published' => 'required',
         ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+
+        $book->update([
+            'title' => $request->get('title'),
+            'content' => $request->get('content'),
+            'price' => $request->get('price'),
+            'year_published' => $request->get('year_published'),
+        ]);
+        if ($request->hasFile('cover')) {
+            $image = $request->file('cover');
+            $name = time() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/assets/books/' . $book->id . '/');
+
+            if (!is_dir($destinationPath)) {
+                mkdir($destinationPath);
+                chmod($destinationPath, 0755);
+            }
+
+            if (!empty(scandir($destinationPath))) {
+                File::cleanDirectory($destinationPath);
+            }
+            $image->move($destinationPath, $name);
+
+            $book->update([
+                'cover' => $name,
+            ]);
+            return back()->with('success', 'updated successfully');
+        }
     }
 
     /**
