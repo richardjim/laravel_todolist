@@ -42,7 +42,12 @@ class BooksController extends Controller
      */
     public function store(StoreBookRequest $request)
     {
-        //
+        try {
+            return 123;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return back()->with('error', 'Book Not Created');
+        }
     }
 
     /**

@@ -7,7 +7,11 @@
             <div class="card">
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
-                <a href="" data-toggle="" class="btn btn-info  col-md-2 ml-auto m-3" data-target="#addNewBookModal">Add new Book</a>
+                <!-- <a href="" data-toggle="" data-target="#addNewBookModal"></a> -->
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-info  col-md-2 ml-auto m-3" data-bs-toggle="modal" data-bs-target="#addNewBookModal">
+                    Add new Book
+                </button>
                 <div class="card-body">
                     @if (session('success'))
                     <div class="alert alert-success m-3" role="alert">
@@ -80,6 +84,9 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <x-modal.create-book />
     </div>
 </div>
 @endsection
