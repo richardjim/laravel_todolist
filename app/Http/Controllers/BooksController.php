@@ -43,13 +43,48 @@ class BooksController extends Controller
     public function store(StoreBookRequest $request)
     {
         try {
-            return 123;
+            $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'content' => 'required',
+                'cover' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'price' => 'required',
+                'year_published' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return back()->withErrors($validator)->withInput();
+            }
+            if ($request->hasFile('cover')) {
+                $image = $request->file('cover');
+                $name = time() . '.' . $image->getClientOriginalExtension();
+            }
+            $book = new Book();
+            $book->title = $request->get('title');
+            $book->content = $request->get('content');
+            $book->price = $request->get('price');
+            $book->year_published = $request->get('year_published');
+            $book->cover = $name;
+            $book->author_id = auth()->user()->id;
+            if ($book->save()) {
+                $this->uploadImage($book, $image, $name);
+                return back()->with('success', 'Book Created');
+            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return back()->with('error', 'Book Not Created');
         }
     }
-
+    public function uploadImage($book, $image, $name)
+    {
+        $destinationPath = public_path('/assets/books/' . $book->id . '/');
+        if (!is_dir($destinationPath)) {
+            mkdir($destinationPath);
+            chmod($destinationPath, 0755);
+        }
+        if (!empty(scandir($destinationPath))) {
+            File::cleanDirectory($destinationPath);
+        }
+        $image->move($destinationPath, $name);
+    }
     /**
      * Display the specified resource.
      *
